@@ -1,0 +1,70 @@
+* {
+    background: #000000;
+    font-family: courier;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    color: #FFFFFF;
+}
+
+
+
+h1 {
+    max-width: 600px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+}
+
+h2 {
+    max-width: 600px;
+    text-align: center;
+    color: #FB5130;
+    font-family: 'Press Start 2P', cursive;
+}
+
+h3 {
+    font-size: 40px;
+    line-height: 0px;
+}
+
+a {
+    text-decoration: underline;
+    color: #FB5130;
+}
+
+input[type="text"], input[type="password"], #first, #last, #username, #password {
+    background-color: #FFFFFF;
+    color: #000000;
+    width: 150px;
+}
+
+button {
+    width: 150px;
+}
+
+canvas {
+    border: #FFFFFF dotted 1px;
+    background-color: #FFFFFF;
+}
+
+.signees, .citySigs, .countrySigs {
+    font-size: 15px;
+}
+
+nav.partials, footer {
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+/*.spin {
+    animation-name: rotate;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+}
+
+@keyframes rotate {
+    0% {transform: rotate(0deg);}
+    50% {transform: rotate(180deg);}
+    100% {transform: rotate(360deg);}
+}*/

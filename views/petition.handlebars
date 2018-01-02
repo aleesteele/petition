@@ -1,0 +1,18 @@
+<body id="petition">
+    <img src="/public/alien-kim.png">
+    {{> nav}}
+    <h1>We love Kim Jong-On, Our Beloved Almighty Falcon Dragon leader, but his cholesterol levels are too high.</h1>
+    <h2>Sign our petition to politely encourage him to enroll in a weight-watchers program.</h2>
+    <form action="/submitSig" method="post">
+        {{# petitionName}}
+    	<input type="text" name="first" value={{first}}>
+    	<input type="text" name="last" value={{last}}>
+        {{/ petitionName}}
+    	<input type="hidden" name="signature"><br><br>
+	<button type="submit">Submit</button>
+    </form><br>
+
+    Please draw your signature here:<br>
+    <canvas width="600" height="150" id="signature"></canvas><br>
+    <h2>{{> error}}</h2>
+</body>

@@ -1,0 +1,18 @@
+<img src="/public/hero-kim.png"><br>
+{{> nav}}
+<h1>Edit Profile</h1>
+<h2>You can edit your profile, but we'll still find you.</h2>
+{{# profile}}
+    <form action="/edit-profile" method="post">
+        <input type="text" name="first" value={{first}}><br>
+        <input type="text" name="last" value={{last}}><br>
+        <input type="text" name="email" value={{email}}><br>
+        <input type="password" name="password" placeholder="New Password"><br>
+        <input type="text" name="age" value={{age}}><br>
+        <input type="text" name="city" value={{city}}><br>
+        <input type="text" name="country" value={{country}}><br>
+        <input type="text" name="url" value={{url}}><br>
+        <button type="submit">Submit Changes</button>
+    </form>
+{{/ profile}}
+<h2>{{> error}}</h2>
