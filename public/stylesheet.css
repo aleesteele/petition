@@ -32,7 +32,7 @@ a {
     color: #FB5130;
 }
 
-input[type="text"], input[type="password"], #first, #last, #username, #password {
+input[type="text"], input[type="password"], #firstname, #lastname, #username, #password {
     background-color: #FFFFFF;
     color: #000000;
     width: 150px;

@@ -71,10 +71,7 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
-    var email = req.body.email;
-    var password = req.body.password;
+    var { firstname, lastname, email, password } = req.body
 
     if (!firstname || !lastname || !email || !password) {
         res.render('register', {
@@ -83,26 +80,34 @@ app.post('/register', (req, res) => {
             csrfToken: req.csrfToken()
         })
     } else {
-        db.hashPassword(password).then((hashedPassword) => {
-            db.registerUser(firstname, lastname, email, hashedPassword).then((user) => {
-                req.session.user = {
-                    firstname: firstname,
-                    lastname: lastname,
-                    email: email,
-                    id: user
-                };
-                res.redirect('/more-info');
-            }).catch((err) => {
-                console.log('ERR FROM REGISTER USER', err)
-            });
-        }).catch((err) => {
-            console.log('ERR HASHING PW', err);
-        })
+        db.searchForUser(email).then(results => {
+            if (!results) {
+                db.hashPassword(password).then((hashedPassword) => {
+                    db.registerUser(firstname, lastname, email, hashedPassword).then((user) => {
+                        console.log('this is the user: ', user)
+                        req.session.user = {
+                            firstname: firstname,
+                            lastname: lastname,
+                            email: email,
+                            id: user.id
+                        };
+                        res.redirect('/more-info');
+                    }).catch((err) => { console.log('ERR FROM REGISTER USER', err) });
+                }).catch((err) => { console.log('ERR HASHING PW', err) })
+            }
+            else {
+                res.render('register', {
+                    layout: 'main',
+                    error: 'This user already exists. Please login.',
+                    csrfToken: req.csrfToken()
+                })
+            }
+        }).catch((err) => { console.log('err checking user', err) })
     }
 })
 
 /* ------------------MORE INFORMATION------------------/ */
-app.get('/more-info', (req, res) => {
+app.get('/more-info', (req, res, next) => {
     res.render('more-info', {
         layout: 'main',
         csrfToken: req.csrfToken()
@@ -110,7 +115,7 @@ app.get('/more-info', (req, res) => {
 });
 
 app.post('/more-info', (req, res, next) => {
-    const userId = req.session.user.id.id; //IMPORTANT!!!
+    const userId = req.session.user.id; //IMPORTANT!!!
     const age = req.body.age;
     const city = req.body.city;
     const country = req.body.country;
@@ -120,9 +125,6 @@ app.post('/more-info', (req, res, next) => {
         res.redirect('/thank-you');
         next();
     } else if (!age || !city || !country || !url) {
-        // body.forEach(function(item) {
-        //     if item.typeOf
-        // }
         //IF THEY DON'T FILL OUT EVERYTHING... THERE'S AN ERROR
         next();
     } else {
@@ -224,16 +226,13 @@ app.get('/petition', (req, res) => {
 });
 
 /* ------------------SUBMIT PAGE------------------/ */
-app.post('/submit-sig', (req, res) => {
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
-    var signature = req.body.signature;
+app.post('/submit-sig', (req, res, next) => {
+    var { firstname, lastname, signature } = req.body
     var userId = req.session.user.id;
 
     if (req.session.signed) {
         res.redirect('/thank-you')
     } else {
-        console.log('inside else statement....', req.body);
         db.signPetition(userId, signature).then((sig) => {
             req.session.signed = {
                 id: userId
@@ -247,15 +246,10 @@ app.post('/submit-sig', (req, res) => {
 
 
 /* ------------------THANK YOU PAGE------------------/ */
-
 app.get('/thank-you', (req, res) => {
-    var sigID = req.session.user.id;
-    // console.log('REQ.SESSION.SIGN.ID INSIDE THANKYOU BUT BEFORE GET SIG', req.session.sign.id);
-    db.getSigImage(sigID).then(function(results) {
-        console.log(results);
-        // console.log('req.session.user.signId', req.session.user.userID);
-        // console.log('results.rows[0]', results.rows[0]);
-        // console.log('results.rows[0].signature', results.rows[0].signature)
+    var userId = req.session.user.id;
+    db.getSigImage(userId).then(function(results) {
+        console.log('results', results);
         res.render('thank-you', {
             layout: 'main',
             signature: results.rows[0].signature,
@@ -276,7 +270,8 @@ app.get('/signatures', (req, res, next) => {
     db.sigList().then((results) => {
         res.render('signatures', {
             layout: 'main',
-            signees: results.rows
+            signees: results.rows,
+            csrfToken: req.csrfToken()
         });
         // console.log('RESULTS.ROWS', results.rows)
     }).catch((err) => {
@@ -288,22 +283,23 @@ app.get('/signatures', (req, res, next) => {
 app.get('/signatures/:city', (req, res) => {
     var city = req.params.city;
     db.getSigsByCity(city).then((results) => {
-        console.log('RESULTS', results)
+        console.log
         res.render('cities', {
             layout: 'main',
             citySigs: results.rows,
-            city: city
+            city: city,
+            csrfToken: req.csrfToken()
         });
     }).catch((err) => {
-        console.log('SIGNATURES/:CITY ERROR', err);
+        console.log('signatures/:city error', err);
     })
 });
 
 /* ------------------EDIT PROFILE PAGE------------------/ */
 app.get('/edit-profile', (req, res) => {
-    var id = req.session.user.id;
+    var userId = req.session.user.id;
     // console.log('ID FOR EDIT PROFILE', id)
-    db.showProfile(id).then((results) => {
+    db.showProfile(userId).then((results) => {
         console.log('inside db query || ', results)
         res.render('edit-profile', {
             layout: 'main',
@@ -314,15 +310,8 @@ app.get('/edit-profile', (req, res) => {
 })
 
 app.post('/edit-profile', (req, res, next) => {
+    var { firstname, lastname, email, password, age, city, country, url } = req.body
     var userId = req.session.user.id;
-    var firstname = req.body.firstname
-    var lastname = req.body.lastname
-    var email = req.body.email
-    var password = req.body.password
-    var age = req.body.age
-    var city = req.body.city
-    var country = req.body.country
-    var url = req.body.url
     // console.log('PASSWORD.LENGTH', password.length)
     if (password.length > 0) {
         db.hashPassword(password).then((hashedPassword) => {
@@ -335,14 +324,11 @@ app.post('/edit-profile', (req, res, next) => {
             console.log('err with hash pw || index.js', err)
         })
     } else {
-        db.changeUserTab(userId, firstname, lastname, email).then((results) => {
-            console.log('RESULTS FOR USERTAB', results);
-            next();
-        }).catch((err) => {
-            console.log('ERR FOR CHANGEUSERS', err)
-        });
-        db.changeUserProfTab(userId, age, city, country, url).then((results) => {
-            console.log('RESULTS FOR USERPROFTAB', results);
+        Promise.all([
+            db.changeUserTab(userId, firstname, lastname, email),
+            db.changeUserProfTab(userId, age, city, country, url)
+        ]).then(results => {
+            console.log('results: ', results);
             res.render('edit-profile', {
                 layout: 'main',
                 error: 'Profile has been updated!', //Using error partial to say password has been updated
@@ -350,10 +336,8 @@ app.post('/edit-profile', (req, res, next) => {
                 csrfToken: req.csrfToken()
             });
         }).catch((err) => {
-            console.log('ERR FOR CHANGESERPROFTAB', err)
-        })
-        //THIS IS NOT WORKING PROPERLY
-
+            console.log('ERR FOR CHANGEUSERS', err)
+        });
     }
 })
 

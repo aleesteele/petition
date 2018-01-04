@@ -26,7 +26,7 @@
     $('canvas').on('mouseup', function(e) {
         signed = false;
         var sig = document.getElementById('signature').toDataURL();
-        $('input[type=hidden]').val(sig);
+        $('input[name=signature]').val(sig);
         console.log(sig);
     })
 
