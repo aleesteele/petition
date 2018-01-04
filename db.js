@@ -10,12 +10,12 @@
 
     /*------------------MODULES------------------/*/
 
-    module.exports.registerUser = function(first, last, email, hashedPassword) {
+    module.exports.registerUser = function(firstname, lastname, email, hashedPassword) {
         const query = `
-        INSERT INTO users (first, last, email, hashed_password)
+        INSERT INTO users (firstname, lastname, email, hashed_password)
         VALUES ($1, $2, $3, $4)
         RETURNING id`
-        const params = [first, last, email, hashedPassword]
+        const params = [firstname, lastname, email, hashedPassword]
         return db.query(query, params).then((results) => {
             console.log('FROM DBSIDE: RESULTS.ROWS[0]', results.rows[0]);
             return results.rows[0];
@@ -71,16 +71,16 @@
 
     module.exports.searchForUser = function(email) {
         //join would be here!
-        const query = `SELECT id, first, last, email FROM users WHERE email = $1`
+        const query = `SELECT id, firstname, lastname, email FROM users WHERE email = $1`
         const params = [ email ]
         return db.query(query, params).then((results) => {
             return results.rows[0]
         })
     }
 
-    module.exports.getName = function(first, last) {
-        const query = `SELECT id, first, last FROM users WHERE first = $1 AND last = $2`
-        const params = [ first, last ]
+    module.exports.getName = function(firstname, lastname) {
+        const query = `SELECT id, firstname, lastname FROM users WHERE firstname = $1 AND lastname = $2`
+        const params = [ firstname, lastname ]
         // console.log('SEARCHNAME ID:', id)
         // console.log('SEARCHNAME QUERY:', query)
         // console.log('SEARCHNAME PARAMS', params)
@@ -119,7 +119,7 @@
 
     module.exports.sigList = function() {
         const query = `
-        SELECT users.first, users.last, user_profiles.city, user_profiles.country
+        SELECT users.firstname, users.lastname, user_profiles.city, user_profiles.country
         FROM users
         INNER JOIN user_profiles
         ON users.id = user_profiles.user_id`
@@ -129,7 +129,7 @@
 
     module.exports.showProfile = function(id) {
         const query = `
-        SELECT users.id, user_profiles.user_id, users.first, users.last, users.email, user_profiles.age, user_profiles.city, user_profiles.country, user_profiles.url
+        SELECT users.id, user_profiles.user_id, users.firstname, users.lastname, users.email, user_profiles.age, user_profiles.city, user_profiles.country, user_profiles.url
         FROM users
         INNER JOIN user_profiles
         ON users.id = user_profiles.user_id
@@ -147,10 +147,10 @@
         return db.query(query, params)
     }
 
-    module.exports.changeUserTab = function(userId, first, last, email) {
+    module.exports.changeUserTab = function(userId, firstname, lastname, email) {
         const query = `
         UPDATE users
-        SET first = $2, last = $3, email = $4
+        SET firstname = $2, lastname = $3, email = $4
         WHERE id = $1`
         const params = [ userId, first, last, email ]
         return db.query(query, params)
@@ -169,7 +169,7 @@
 
     module.exports.getSigsByCity = function(city) {
         const query = `
-        SELECT users.first, users.last, user_profiles.city, user_profiles.country, user_profiles.url
+        SELECT users.firstname, users.lastname, user_profiles.city, user_profiles.country, user_profiles.url
         FROM users
         INNER JOIN user_profiles
         ON users.id = user_profiles.user_id
@@ -184,8 +184,7 @@
     module.exports.deleteSig = function(userId) {
         const query = `
         DELETE FROM signatures
-        WHERE signatures.user_id = $1
-        `
+        WHERE signatures.user_id = $1`
         const params = [ userId ]
         return db.query(query, params)
     }

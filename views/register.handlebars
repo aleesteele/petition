@@ -4,8 +4,9 @@
 <h2>You need to before signing our petition.</h2>
 
 <form action="/register" method="post">
-    <input type="text" name="first" placeholder="First Name"><br>
-    <input type="text" name="last" placeholder="Last Name"><br>
+    <input type="hidden" name="_csrf" value={{csrfToken}}>
+    <input type="text" name="firstname" placeholder="First Name"><br>
+    <input type="text" name="lastname" placeholder="Last Name"><br>
     <input type="text" name="email" placeholder="Email"><br>
     <input type="password" name="password" placeholder="Password"><br>
     <button type="submit">Sign up</button>

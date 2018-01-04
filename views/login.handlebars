@@ -3,6 +3,7 @@
 <h1>LOGIN!!!</h1>
 Do it. You have to.
 <form action="/login" method="post">
+    <input type="hidden" name="_csrf" value={{csrfToken}}>
     <input type="text" name="email" placeholder="Email"><br>
     <input type="password" name="password" placeholder="Password"><br>
     <button type="submit">Login</button>
