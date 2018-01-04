@@ -9,3 +9,7 @@ A playful petition on politics in the Korean Peninsula. I built this at Spiced A
 
 ## Overview
 This project was built in order to learn how to integrate the Handlebars templating engine with Express & jQuery.
+
+## Preview
+Users have the option to login or register in order to join the website.
+![register](https://github.com/aleesteele/petition/master/public/register.png)
