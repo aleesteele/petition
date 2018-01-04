@@ -22,7 +22,7 @@ However, once the user has signed the petition, they are redirected to a playful
 ![thank-you](https://github.com/aleesteele/petition/blob/master/public/thank-you.png)
 Users also have the option to edit their profile.
 ![edit-profile](https://github.com/aleesteele/petition/blob/master/public/edit-profile.png)
-Or look at other signatures, which can be categorized by city.
+Or look at other signatures, which can be organized by city.
 ![signatures](https://github.com/aleesteele/petition/blob/master/public/signatures.png)
 
 
