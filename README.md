@@ -12,4 +12,4 @@ This project was built in order to learn how to integrate the Handlebars templat
 
 ## Preview
 Users have the option to login or register in order to join the website.
-![register](https://github.com/aleesteele/petition/master/public/register.png)
+![register](https://github.com/aleesteele/petition/blob/master/public/petition.png)
