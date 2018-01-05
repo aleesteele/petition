@@ -1,5 +1,5 @@
 # Petition
-A playful petition on politics in the Korean Peninsula. I built this at Spiced Academy during week 7 of the 12-week course on Javascript-focused web development. Check out a live demo [here](https://aleesteele-petition.herokuapp.com/) and the rest of my web-development portfolio [here](https://github.com/aleesteele/portfolio).
+A playful petition on politics in the Korean Peninsula. I built this at Spiced Academy during week 7 of the 12-week course on Javascript-focused web development. Check out the rest of my web-development portfolio [here](https://github.com/aleesteele/portfolio).
 
 ## Technologies
 - **Language**: Javascript
@@ -25,6 +25,7 @@ Users also have the option to edit their profile.
 Or look at other signatures, which can be organized by city.
 ![signatures](https://github.com/aleesteele/petition/blob/master/public/signatures.png)
 
-
 ## Future Improvements
 - Improve use of redis, csurf
+- Upload to heroku
+- Bug with cookie session id
