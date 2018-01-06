@@ -29,3 +29,7 @@ Or look at other signatures, which can be organized by city.
 - Improve use of redis, csurf
 - Upload to heroku
 - Bug with cookie session id
+
+## Contact
+- Email: aleesteele@gmail.com
+- Linkedin: Anne Lee Steele
